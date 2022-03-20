@@ -21,28 +21,27 @@ function createCommentsList(comments) {
 
 async function fetchCommentsForPost() {
   const postId = loadCommentsBtnElement.dataset.postid;
-    try {
-        const response = await fetch(`/posts/${postId}/comments`);
+  try {
+    const response = await fetch(`/posts/${postId}/comments`);
 
-        if(!response.ok){
-            alert('fetching comments failed!')
-            return ;
-        }
-    
-      const responseData = await response.json();
-    
-      if (response && responseData.length > 0) {
-        const commentListElement = createCommentsList(responseData);
-        commentSectionElement.innerHTML = "";
-        commentSectionElement.appendChild(commentListElement);
-      } else {
-        commentSectionElement.firstElementChild.textContent =
-          "We could not find any comments. Maybe add one?";
-      }
-    } catch (error) {
-        alert('getting comments')
+    if (!response.ok) {
+      alert("fetching comments failed!");
+      return;
     }
-    
+
+    const responseData = await response.json();
+
+    if (response && responseData.length > 0) {
+      const commentListElement = createCommentsList(responseData);
+      commentSectionElement.innerHTML = "";
+      commentSectionElement.appendChild(commentListElement);
+    } else {
+      commentSectionElement.firstElementChild.textContent =
+        "We could not find any comments. Maybe add one?";
+    }
+  } catch (error) {
+    alert("getting comments");
+  }
 }
 
 async function saveComment(event) {
@@ -64,15 +63,13 @@ async function saveComment(event) {
     });
 
     if (response.ok) {
-        fetchCommentsForPost();
-      } else {
-        alert("could not send comments!");
-      }
+      fetchCommentsForPost();
+    } else {
+      alert("could not send comments! - :(");
+    }
   } catch (error) {
-      alert('Could not send request - maybe try again later!')
+    alert("Could not send request - maybe try again later!");
   }
-
-  
 }
 
 loadCommentsBtnElement.addEventListener("click", fetchCommentsForPost);
